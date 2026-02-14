@@ -1,7 +1,7 @@
 function uploadImage() {
   let input = document.getElementById("imageInput");
   if (input.files.length === 0) {
-    alert("Please select an image");
+    alert("Please upload an image");
     return;
   }
 
@@ -31,7 +31,6 @@ function uploadImage() {
 
     data.forEach(d => {
       let [x1, y1, x2, y2] = d.box;
-
       let label = d.label.toLowerCase();
       let color = "red";
 
@@ -41,15 +40,13 @@ function uploadImage() {
       else if (label.includes("person")) color = "purple";
       else if (label.includes("mask")) color = "red";
       else if (label.includes("glove")) color = "cyan";
-      else if (label.includes("glass")) color = "yellow"; // goggles
+      else if (label.includes("glass")) color = "yellow";
       else if (label.includes("ear")) color = "pink";
 
-      // Draw bounding box
       ctx.strokeStyle = color;
       ctx.lineWidth = 3;
       ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
 
-      // Label text
       ctx.fillStyle = color;
       ctx.font = "16px Arial";
       ctx.fillText(

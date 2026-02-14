@@ -1,7 +1,7 @@
 from ultralytics import YOLO
 
 # Load trained model
-model = YOLO("runs/detect/train8/weights/best.pt")
+model = YOLO("runs/detect/train10/weights/best.pt")
 
 # Run prediction on validation images
 model.predict(

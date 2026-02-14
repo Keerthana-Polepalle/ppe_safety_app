@@ -8,8 +8,8 @@ model = YOLO("yolov8n.pt")
 
 model.train(
     data=DATA_YAML,
-    epochs=10,
-    imgsz=416,
+    epochs=20,
+    imgsz=640,
     batch=8,
     device="cpu"
 )

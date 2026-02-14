@@ -1,24 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>PPE Detection System</title>
+  <meta charset="UTF-8">
+  <title>Industrial PPE Safety Monitoring</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>PPE Detection System</h2>
+<header>
+  <h1>🏭 Industrial PPE Safety Monitoring System</h1>
+  <p>AI-based Personal Protective Equipment Detection</p>
+</header>
 
-<input type="file" id="imageInput" accept="image/*">
-<br><br>
+<main class="container">
 
-<button onclick="uploadImage()">Detect PPE</button>
+  <!-- Upload Section -->
+  <div class="card upload-card">
+    <h2 class="upload-title">Upload Industrial Image</h2>
+    <input type="file" id="imageInput" accept="image/*">
+    <button class="detect-btn" onclick="uploadImage()">Detect PPE</button>
+  </div>
 
-<br><br>
+  <!-- Output Image -->
+  <div class="card canvas-card">
+    <h2 class="output-title">Detection Output</h2>
+    <canvas id="canvas"></canvas>
+  </div>
 
-<canvas id="canvas"></canvas>
+  <!-- Results -->
+  <div class="card result-card">
+    <h2 class="result-title">Detected PPE Items</h2>
+    <pre id="result">Upload an image and click Detect PPE</pre>
+  </div>
 
-<h3>Detection Results</h3>
-<pre id="result">Upload an image and click Detect PPE</pre>
+</main>
+
+<footer>
+  <p>Final Year Project | AI for Industrial Safety</p>
+</footer>
 
 <script src="script.js"></script>
 </body>

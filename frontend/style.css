@@ -1,29 +1,120 @@
+/* --------- Global --------- */
 body {
-  font-family: Arial, sans-serif;
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  color: #111827;
+  background:
+    linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)),
+    url("industrial_bg.jpg") no-repeat center center fixed;
+  background-size: cover;
+}
+
+/* --------- Header --------- */
+header {
+  background-color: rgba(2, 6, 23, 0.95);
+  padding: 20px;
   text-align: center;
-  background-color: #f7f7f7;
+  border-bottom: 4px solid #f59e0b;
 }
 
-h2 {
-  margin-top: 20px;
+header h1 {
+  margin: 0;
+  color: #f59e0b;
 }
 
-button {
-  padding: 10px 20px;
+header p {
+  margin-top: 6px;
+  color: #e5e7eb;
+}
+
+/* --------- Layout --------- */
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 25px;
+  padding: 30px;
+}
+
+/* --------- Cards --------- */
+.card {
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  border-left: 6px solid #f59e0b;
+}
+
+.card h2 {
+  margin-top: 0;
+}
+
+/* --------- Section Title Colors --------- */
+.upload-title {
+  color: #2563eb; /* Steel Blue */
+}
+
+.output-title {
+  color: #0f172a; /* Industrial Dark */
+}
+
+.result-title {
+  color: #16a34a; /* Safety Green */
+}
+
+/* --------- Upload Input --------- */
+.upload-card input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+}
+
+/* --------- Detect Button --------- */
+.detect-btn {
+  width: 100%;
+  margin-top: 15px;
+  padding: 12px;
+  background: #f97316; /* Safety Orange */
+  border: none;
+  color: #111827;
   font-size: 16px;
+  font-weight: bold;
+  border-radius: 6px;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
+.detect-btn:hover {
+  background: #fb923c;
+  transform: translateY(-2px);
+}
+
+/* --------- Canvas --------- */
 canvas {
-  border: 2px solid #000;
+  width: 100%;
   margin-top: 10px;
-  max-width: 95%;
+  border-radius: 8px;
+  border: 2px dashed #0f172a;
+  background: #000;
 }
 
+/* --------- Results --------- */
 pre {
-  background: #ffffff;
+  background: #020617;
   padding: 15px;
-  display: inline-block;
-  text-align: left;
-  margin-top: 10px;
+  border-radius: 8px;
+  color: #22c55e;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* --------- Footer --------- */
+footer {
+  text-align: center;
+  padding: 15px;
+  background: rgba(2, 6, 23, 0.95);
+  color: #e5e7eb;
+  border-top: 3px solid #f59e0b;
 }
