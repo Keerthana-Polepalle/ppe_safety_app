@@ -1,43 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Industrial PPE Safety Monitoring</title>
-  <link rel="stylesheet" href="style.css">
+<title>PPE Detection System</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<header>
-  <h1>🏭 Industrial PPE Safety Monitoring System</h1>
-  <p>AI-based Personal Protective Equipment Detection</p>
-</header>
+<h1>🏭 PPE Industrial Safety Detection</h1>
 
-<main class="container">
+<div class="grid">
 
-  <!-- Upload Section -->
-  <div class="card upload-card">
-    <h2 class="upload-title">Upload Industrial Image</h2>
-    <input type="file" id="imageInput" accept="image/*">
-    <button class="detect-btn" onclick="uploadImage()">Detect PPE</button>
-  </div>
+<!-- 1. Upload -->
+<div class="card">
+<h2>1️⃣ Choose Image</h2>
+<input type="file" id="imageInput">
+<img id="preview">
+</div>
 
-  <!-- Output Image -->
-  <div class="card canvas-card">
-    <h2 class="output-title">Detection Output</h2>
-    <canvas id="canvas"></canvas>
-  </div>
+<!-- 2. Detect Upload -->
+<div class="card">
+<h2>2️⃣ Detect Uploaded PPE</h2>
+<button onclick="detectImage()">Detect PPE</button>
+<img id="uploadResult">
+</div>
 
-  <!-- Results -->
-  <div class="card result-card">
-    <h2 class="result-title">Detected PPE Items</h2>
-    <pre id="result">Upload an image and click Detect PPE</pre>
-  </div>
+<!-- 3. Start Webcam -->
+<div class="card">
+<h2>3️⃣ Start Webcam</h2>
+<button onclick="startWebcam()">Start Webcam</button>
+<video id="webcam" autoplay></video>
+</div>
 
-</main>
+<!-- 4. Capture Photo -->
+<div class="card">
+<h2>4️⃣ Captured Photo</h2>
+<button onclick="capturePhoto()">Take Picture</button>
+<img id="capturedImage">
+</div>
 
-<footer>
-  <p>Final Year Project | AI for Industrial Safety</p>
-</footer>
+<!-- 5. Detect Webcam PPE -->
+<div class="card">
+<h2>5️⃣ Detect Webcam PPE</h2>
+<button onclick="detectCaptured()">Detect PPE</button>
+<img id="webcamResult">
+</div>
+
+</div>
 
 <script src="script.js"></script>
 </body>

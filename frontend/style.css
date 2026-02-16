@@ -1,120 +1,98 @@
-/* --------- Global --------- */
+/* =========================
+   Industrial Background
+========================= */
+
 body {
-  margin: 0;
-  font-family: "Segoe UI", Tahoma, sans-serif;
-  color: #111827;
-  background:
-    linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)),
-    url("industrial_bg.jpg") no-repeat center center fixed;
-  background-size: cover;
+margin:0;
+font-family:Arial, sans-serif;
+color:white;
+text-align:center;
+
+/* Background image */
+background:
+linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.75)),
+url("industrial_bg.jpg");
+
+background-size:cover;
+background-position:center;
+background-attachment:fixed;
 }
 
-/* --------- Header --------- */
-header {
-  background-color: rgba(2, 6, 23, 0.95);
-  padding: 20px;
-  text-align: center;
-  border-bottom: 4px solid #f59e0b;
+/* =========================
+   Title Glow
+========================= */
+
+h1 {
+padding:20px;
+font-size:32px;
+text-shadow:0 0 15px cyan;
 }
 
-header h1 {
-  margin: 0;
-  color: #f59e0b;
+/* =========================
+   Grid Layout
+========================= */
+
+.grid {
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:20px;
+padding:20px;
 }
 
-header p {
-  margin-top: 6px;
-  color: #e5e7eb;
-}
+/* =========================
+   Cards — Glass + 3D
+========================= */
 
-/* --------- Layout --------- */
-.container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 25px;
-  padding: 30px;
-}
-
-/* --------- Cards --------- */
 .card {
-  background: rgba(255, 255, 255, 0.96);
-  border-radius: 14px;
-  padding: 22px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-  border-left: 6px solid #f59e0b;
+
+background:rgba(0,0,0,0.55);
+backdrop-filter:blur(6px);
+
+padding:15px;
+border-radius:15px;
+
+box-shadow:0 0 20px cyan;
+
+transition:0.3s;
 }
 
-.card h2 {
-  margin-top: 0;
+.card:hover {
+transform:scale(1.05);
+box-shadow:0 0 40px cyan;
 }
 
-/* --------- Section Title Colors --------- */
-.upload-title {
-  color: #2563eb; /* Steel Blue */
+/* =========================
+   Buttons
+========================= */
+
+button {
+
+background:linear-gradient(45deg, cyan, #00ffaa);
+
+border:none;
+padding:10px 20px;
+border-radius:8px;
+
+cursor:pointer;
+font-weight:bold;
+
+transition:0.3s;
 }
 
-.output-title {
-  color: #0f172a; /* Industrial Dark */
+button:hover {
+transform:scale(1.1);
+box-shadow:0 0 15px cyan;
 }
 
-.result-title {
-  color: #16a34a; /* Safety Green */
-}
+/* =========================
+   Images & Video
+========================= */
 
-/* --------- Upload Input --------- */
-.upload-card input {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  background: #f8fafc;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-}
+img, video {
 
-/* --------- Detect Button --------- */
-.detect-btn {
-  width: 100%;
-  margin-top: 15px;
-  padding: 12px;
-  background: #f97316; /* Safety Orange */
-  border: none;
-  color: #111827;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
+width:100%;
+border-radius:10px;
+margin-top:10px;
 
-.detect-btn:hover {
-  background: #fb923c;
-  transform: translateY(-2px);
-}
-
-/* --------- Canvas --------- */
-canvas {
-  width: 100%;
-  margin-top: 10px;
-  border-radius: 8px;
-  border: 2px dashed #0f172a;
-  background: #000;
-}
-
-/* --------- Results --------- */
-pre {
-  background: #020617;
-  padding: 15px;
-  border-radius: 8px;
-  color: #22c55e;
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-/* --------- Footer --------- */
-footer {
-  text-align: center;
-  padding: 15px;
-  background: rgba(2, 6, 23, 0.95);
-  color: #e5e7eb;
-  border-top: 3px solid #f59e0b;
+border:2px solid cyan;
 }

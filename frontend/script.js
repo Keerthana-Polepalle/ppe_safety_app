@@ -1,68 +1,102 @@
-function uploadImage() {
-  let input = document.getElementById("imageInput");
-  if (input.files.length === 0) {
-    alert("Please upload an image");
-    return;
-  }
+const backend = "http://127.0.0.1:5000";
 
-  let file = input.files[0];
-  let img = new Image();
-  let canvas = document.getElementById("canvas");
-  let ctx = canvas.getContext("2d");
+let imageInput = document.getElementById("imageInput");
+let preview = document.getElementById("preview");
 
-  img.onload = function () {
-    canvas.width = img.width;
-    canvas.height = img.height;
-    ctx.drawImage(img, 0, 0);
-  };
+let video = document.getElementById("webcam");
+let capturedImg = document.getElementById("capturedImage");
 
-  img.src = URL.createObjectURL(file);
+let stream = null;
+let capturedBlob = null;
 
-  let formData = new FormData();
-  formData.append("image", file);
+// =======================
+// Upload Preview
+// =======================
 
-  fetch("http://127.0.0.1:5000/detect", {
-    method: "POST",
-    body: formData
-  })
-  .then(res => res.json())
-  .then(data => {
-    let output = "";
+imageInput.onchange = () => {
+preview.src = URL.createObjectURL(imageInput.files[0]);
+};
 
-    data.forEach(d => {
-      let [x1, y1, x2, y2] = d.box;
-      let label = d.label.toLowerCase();
-      let color = "red";
+// =======================
+// Detect Uploaded Image
+// =======================
 
-      if (label.includes("helmet")) color = "green";
-      else if (label.includes("vest")) color = "blue";
-      else if (label.includes("boot")) color = "orange";
-      else if (label.includes("person")) color = "purple";
-      else if (label.includes("mask")) color = "red";
-      else if (label.includes("glove")) color = "cyan";
-      else if (label.includes("glass")) color = "yellow";
-      else if (label.includes("ear")) color = "pink";
+async function detectImage() {
 
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 3;
-      ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
+let file = imageInput.files[0];
+if (!file) return alert("Choose image!");
 
-      ctx.fillStyle = color;
-      ctx.font = "16px Arial";
-      ctx.fillText(
-        `${d.label} (${d.confidence})`,
-        x1,
-        y1 > 20 ? y1 - 5 : y1 + 20
-      );
+let formData = new FormData();
+formData.append("file", file);
 
-      output += `✔ ${d.label} - ${d.confidence}\n`;
-    });
+let res = await fetch(backend + "/detect", {
+method:"POST",
+body:formData
+});
 
-    document.getElementById("result").innerText =
-      output || "No PPE detected";
-  })
-  .catch(() => {
-    document.getElementById("result").innerText =
-      "Error connecting to backend";
-  });
+let blob = await res.blob();
+document.getElementById("uploadResult").src =
+URL.createObjectURL(blob);
+}
+
+// =======================
+// Start Webcam
+// =======================
+
+async function startWebcam() {
+
+if (stream) return;
+
+stream = await navigator.mediaDevices.getUserMedia({video:true});
+video.srcObject = stream;
+}
+
+// =======================
+// Capture Photo
+// =======================
+
+function capturePhoto() {
+
+if (!stream) return alert("Start webcam first!");
+
+let canvas = document.createElement("canvas");
+canvas.width = video.videoWidth;
+canvas.height = video.videoHeight;
+
+let ctx = canvas.getContext("2d");
+ctx.drawImage(video,0,0);
+
+canvas.toBlob(blob => {
+
+capturedBlob = blob;
+capturedImg.src = URL.createObjectURL(blob);
+
+});
+
+// stop webcam
+stream.getTracks().forEach(track => track.stop());
+video.srcObject = null;
+stream = null;
+}
+
+// =======================
+// Detect Captured Image
+// =======================
+
+async function detectCaptured() {
+
+if (!capturedBlob) return alert("Capture photo first!");
+
+let formData = new FormData();
+formData.append("file", capturedBlob);
+
+let res = await fetch(backend + "/detect", {
+method:"POST",
+body:formData
+});
+
+let blob = await res.blob();
+
+document.getElementById("webcamResult").src =
+URL.createObjectURL(blob);
 }

@@ -1,81 +1,103 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, send_file
+from flask_cors import CORS
 from ultralytics import YOLO
 import cv2
 import numpy as np
-from flask_cors import CORS
 import os
+import tempfile
+
+# ==============================
+# Flask Setup
+# ==============================
 
 app = Flask(__name__)
-CORS(app)  # Allow frontend to access backend
+CORS(app)
 
-# -------------------------
-# Load YOLO model
-# -------------------------
-MODEL_PATH = "best.pt"   # make sure best.pt is inside backend folder
+# ==============================
+# Load YOLO Model
+# ==============================
 
-if not os.path.exists(MODEL_PATH):
-    raise FileNotFoundError("best.pt not found in backend folder")
+model = YOLO("best.pt")   # <-- make sure best.pt is inside backend folder
 
-print("Loading PPE detection model...")
-model = YOLO(MODEL_PATH)
-print("Model loaded successfully")
+# ==============================
+# PPE Color Map
+# ==============================
 
-# -------------------------
-# Home route
-# -------------------------
+colors = {
+    "Person": (255, 0, 0),
+    "Helmet": (0, 255, 0),
+    "Vest": (0, 0, 255),
+    "Boots": (255, 255, 0),
+    "Mask": (255, 0, 255),
+    "Glove": (0, 255, 255),
+    "Goggles": (128, 0, 255),
+    "Ear-protection": (255, 128, 0)
+}
+
+# ==============================
+# Home Route
+# ==============================
+
 @app.route("/")
 def home():
-    return "PPE Detection Backend Running"
+    return "PPE Detection Backend Running ✅"
 
-# -------------------------
-# Detect route
-# -------------------------
+# ==============================
+# Detection Route (Upload/Webcam)
+# ==============================
+
 @app.route("/detect", methods=["POST"])
 def detect():
-    print("Detect API called")
 
-    if "image" not in request.files:
-        return jsonify({"error": "No image uploaded"})
+    if "file" not in request.files:
+        return "No file uploaded", 400
 
-    file = request.files["image"]
-    img_bytes = file.read()
+    file = request.files["file"]
 
-    # Convert bytes to OpenCV image
-    img = cv2.imdecode(
-        np.frombuffer(img_bytes, np.uint8),
-        cv2.IMREAD_COLOR
-    )
+    # Read image
+    file_bytes = np.frombuffer(file.read(), np.uint8)
+    img = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
 
     if img is None:
-        return jsonify({"error": "Invalid image file"})
+        return "Invalid image", 400
 
-    # Run YOLO inference
-    results = model(img, conf=0.4)
+    # YOLO Detection
+    results = model(img)
 
-    detections = []
+    for result in results:
+        for box in result.boxes:
 
-    for r in results:
-        for box in r.boxes:
-            x1, y1, x2, y2 = box.xyxy[0].tolist()
-            cls_id = int(box.cls)
-            confidence = float(box.conf)
-            label = model.names[cls_id]
+            x1, y1, x2, y2 = map(int, box.xyxy[0])
+            conf = float(box.conf[0])
+            cls = int(box.cls[0])
 
-            detections.append({
-                "label": label,
-                "confidence": round(confidence, 2),
-                "box": [
-                    int(x1),
-                    int(y1),
-                    int(x2),
-                    int(y2)
-                ]
-            })
+            label = model.names[cls]
 
-    return jsonify(detections)
+            color = colors.get(label, (255, 255, 255))
 
-# -------------------------
-# Run app
-# -------------------------
+            # Draw rectangle
+            cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
+
+            # Draw label
+            cv2.putText(
+                img,
+                f"{label} {conf:.2f}",
+                (x1, y1 - 5),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.6,
+                color,
+                2
+            )
+
+    # Save temp result
+    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".jpg")
+    cv2.imwrite(temp_file.name, img)
+
+    return send_file(temp_file.name, mimetype="image/jpeg")
+
+# ==============================
+# Run Server
+# ==============================
+
 if __name__ == "__main__":
     app.run(debug=True)
